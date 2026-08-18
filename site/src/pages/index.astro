@@ -1,0 +1,491 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+import { GAMES, BUCKETS, STATS } from '../data/games';
+
+const title = 'Hunt Games — A Field Index of Indie Game Wikis';
+const description = SITE.description;
+
+const liveGames = GAMES.filter((g) => g.domain);
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: SITE.name,
+    url: SITE.url,
+    logo: new URL('/img/icon-512.png', SITE.url).href,
+    email: SITE.contactEmail,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.name,
+    url: SITE.url,
+    description: SITE.description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `${SITE.name} network directory`,
+    numberOfItems: liveGames.length,
+    itemListElement: liveGames.map((g, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'WebSite',
+        name: g.title,
+        url: `https://${g.domain}/`,
+        description: g.desc,
+        genre: g.genre,
+      },
+    })),
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema}>
+  <section class="hero">
+    <canvas id="contour" aria-hidden="true"></canvas>
+    <div class="wrap hero-inner">
+      <p class="eyebrow">hunt-games.com &middot; field index</p>
+      <h1>Every world we&rsquo;ve mapped, indexed in one place.</h1>
+      <p class="lede">
+        Hunt Games builds independent, deeply-researched wikis for games that don&rsquo;t get one
+        anywhere else &mdash; one focused site per world. This index catalogs all of them.
+      </p>
+      <p class="lede lede-sub">
+        Every entry links straight through to that game&rsquo;s Steam page, release dates, and
+        patch notes, cross-checked against the wider community database &mdash; then to the deep,
+        sourced guide built here for whatever those pages leave out.
+      </p>
+      <div class="stats-row">
+        <div class="stat"><span class="num">{STATS.total}</span><span class="label">worlds catalogued</span></div>
+        <div class="stat"><span class="num">{STATS.live}</span><span class="label">live</span></div>
+        <div class="stat"><span class="num">{STATS.pending}</span><span class="label">in survey</span></div>
+        <div class="stat"><span class="num">{STATS.buckets}</span><span class="label">genre buckets</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="index">
+    <div class="wrap">
+      <div class="filter-bar" id="filters">
+        <span class="fb-label">Filter</span>
+        <button type="button" class="chip" data-bucket="All" aria-pressed="true">All</button>
+        {BUCKETS.map((b) => (
+          <button type="button" class="chip" data-bucket={b} aria-pressed="false">{b}</button>
+        ))}
+        <span class="result-count" id="result-count">{GAMES.length} of {GAMES.length} entries</span>
+      </div>
+    </div>
+    <div class="wrap">
+      <div class="grid" id="grid">
+        {GAMES.map((g) => {
+          const isLive = Boolean(g.domain);
+          const Tag = isLive ? 'a' : 'div';
+          return (
+            <Tag
+              class={`card ${isLive ? 'is-live' : 'is-pending'}`}
+              href={isLive ? `https://${g.domain}/` : undefined}
+              target={isLive ? '_blank' : undefined}
+              rel={isLive ? 'noopener' : undefined}
+              data-bucket={g.bucket}
+            >
+              <div class="card-top">
+                <span class="card-num">N&deg; {String(g.n).padStart(3, '0')}</span>
+                <span class={`stamp ${isLive ? 'live' : 'pending'}`}>
+                  {isLive ? 'Live' : 'In survey'}
+                </span>
+              </div>
+              <div class="card-title">{g.title}</div>
+              <p class="card-desc">{g.desc}</p>
+              <p class="card-tax">{g.genre}</p>
+              <div class="card-domain">
+                <span>{g.domain ?? 'domain pending'}</span>
+              </div>
+            </Tag>
+          );
+        })}
+      </div>
+      <p class="empty-row" id="empty-row">No entries match that filter.</p>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <h2>How an entry gets catalogued</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <span class="step-num">01</span>
+          <h3>Surveyed</h3>
+          <p>
+            Every site is built against measured search demand for that specific game &mdash; no
+            page exists without a reason for someone to look for it.
+          </p>
+        </div>
+        <div class="how-step">
+          <span class="step-num">02</span>
+          <h3>Catalogued</h3>
+          <p>
+            Once live, the wiki is added here with its own subdomain, genre, and status &mdash;
+            filterable from this index.
+          </p>
+        </div>
+        <div class="how-step">
+          <span class="step-num">03</span>
+          <h3>Maintained</h3>
+          <p>
+            Entries are periodically re-checked for broken links, stale release info, and outdated
+            guides as the games themselves update.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    position: relative;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .hero canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .hero-inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-block: clamp(3rem, 8vw, 5.5rem) clamp(2.5rem, 6vw, 3.5rem);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 4.6vw + 0.6rem, 4.1rem);
+    line-height: 1.04;
+    margin: 0.7rem auto 1.1rem;
+    max-width: 18ch;
+  }
+  .lede {
+    font-size: clamp(1.02rem, 0.4vw + 0.95rem, 1.18rem);
+    color: var(--text-soft);
+    max-width: 50ch;
+    margin: 0 auto 1.1rem;
+  }
+  .lede-sub {
+    font-size: clamp(0.92rem, 0.2vw + 0.88rem, 1rem);
+    color: var(--text-faint);
+    max-width: 54ch;
+    margin: 0 auto 2.4rem;
+  }
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 2.6rem;
+    width: 100%;
+    border-top: 1px solid var(--line);
+    padding-top: 1.4rem;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    padding: 0.4rem 0;
+  }
+  .stat .num {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 1.5rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--text);
+  }
+  .stat .label {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    padding-block: 1.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .fb-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-right: 0.4rem;
+  }
+  .chip {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    background: transparent;
+    color: var(--text-soft);
+    border: 1px solid var(--line-strong);
+    padding: 0.36rem 0.8rem;
+    cursor: pointer;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--text);
+    color: var(--paper);
+    border-color: var(--text);
+  }
+  .result-count {
+    margin-left: auto;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-faint);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  .card {
+    position: relative;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 1.5rem 1.4rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: inherit;
+  }
+  .card.is-live:hover {
+    background: var(--panel);
+  }
+  .card.is-live:hover .card-title {
+    color: var(--accent);
+  }
+  .card.is-pending {
+    cursor: default;
+  }
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .card-num {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+    font-variant-numeric: tabular-nums;
+  }
+  .stamp {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+    padding: 0.14rem 0.4rem;
+    transform: rotate(-3deg);
+    white-space: nowrap;
+  }
+  .stamp.live {
+    color: var(--status-live);
+  }
+  .stamp.pending {
+    color: var(--status-pending);
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.22rem;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .card-desc {
+    font-size: 0.92rem;
+    color: var(--text-soft);
+    flex-grow: 1;
+    margin: 0;
+  }
+  .card-tax {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 0.86rem;
+    color: var(--text-faint);
+    margin: 0;
+  }
+  .card-domain {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--text-faint);
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card.is-live .card-domain {
+    color: var(--text-soft);
+  }
+  .card.is-live .card-domain::after {
+    content: '\2192';
+    opacity: 0;
+  }
+  .card.is-live:hover .card-domain::after {
+    opacity: 1;
+  }
+  .card.is-hidden {
+    display: none;
+  }
+  .empty-row {
+    display: none;
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--text-faint);
+    font-size: 0.92rem;
+  }
+  .empty-row.is-visible {
+    display: block;
+  }
+
+  .how {
+    padding-block: clamp(3rem, 6vw, 4.5rem);
+    border-bottom: 1px solid var(--line);
+  }
+  .how h2 {
+    font-size: clamp(1.6rem, 1.6vw + 1rem, 2.15rem);
+    margin: 0 0 2.2rem;
+    max-width: 20ch;
+  }
+  .how-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .how-step {
+    border-top: 2px solid var(--line-strong);
+    padding-top: 1rem;
+  }
+  .step-num {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .how-step h3 {
+    font-size: 1.15rem;
+    margin: 0.5rem 0 0.5rem;
+  }
+  .how-step p {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    margin: 0;
+  }
+
+  @media (max-width: 860px) {
+    .how-steps {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+  }
+</style>
+
+<script>
+  (function () {
+    var filtersEl = document.getElementById('filters');
+    var gridEl = document.getElementById('grid');
+    var emptyRowEl = document.getElementById('empty-row');
+    var resultCountEl = document.getElementById('result-count');
+    if (!filtersEl || !gridEl || !emptyRowEl || !resultCountEl) return;
+
+    var filters = filtersEl;
+    var emptyRow = emptyRowEl;
+    var resultCount = resultCountEl;
+    var cards = Array.prototype.slice.call(gridEl.querySelectorAll('.card'));
+    var total = cards.length;
+
+    filters.addEventListener('click', function (e) {
+      var target = e.target;
+      if (!(target instanceof HTMLElement)) return;
+      var btn = target.closest('.chip');
+      if (!btn || !(btn instanceof HTMLElement)) return;
+      var bucket = btn.dataset.bucket || 'All';
+
+      filters.querySelectorAll('.chip').forEach(function (c) {
+        c.setAttribute('aria-pressed', 'false');
+      });
+      btn.setAttribute('aria-pressed', 'true');
+
+      var visible = 0;
+      cards.forEach(function (card) {
+        var match = bucket === 'All' || card.getAttribute('data-bucket') === bucket;
+        card.classList.toggle('is-hidden', !match);
+        if (match) visible++;
+      });
+      emptyRow.classList.toggle('is-visible', visible === 0);
+      resultCount.textContent = visible + ' of ' + total + ' entries';
+    });
+  })();
+
+  // Ambient topographic contour lines in the hero. Static (no animation),
+  // theme-aware, and skipped entirely if canvas isn't available.
+  (function () {
+    var canvasEl = document.getElementById('contour');
+    if (!(canvasEl instanceof HTMLCanvasElement)) return;
+    var heroEl = canvasEl.closest('.hero');
+    if (!(heroEl instanceof HTMLElement)) return;
+
+    var canvas = canvasEl;
+    var hero = heroEl;
+
+    function draw() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = hero.clientWidth;
+      var h = hero.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      var ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, w, h);
+      var line = getComputedStyle(document.documentElement).getPropertyValue('--line-strong').trim() || '#ccc';
+      ctx.strokeStyle = line;
+      ctx.lineWidth = 1;
+      var cx = w * 0.5;
+      var cy = h * 0.42;
+      for (var r = 60; r < Math.max(w, h) * 1.1; r += 50) {
+        ctx.beginPath();
+        var pts = 90;
+        for (var i = 0; i <= pts; i++) {
+          var t = (i / pts) * Math.PI * 2;
+          var wob = Math.sin(t * 3 + r * 0.05) * (r * 0.06) + Math.cos(t * 5 - r * 0.02) * (r * 0.03);
+          var x = cx + Math.cos(t) * (r + wob);
+          var y = cy + Math.sin(t) * (r + wob) * 0.62;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.globalAlpha = Math.max(0.04, 0.22 - r / (Math.max(w, h) * 2.6));
+        ctx.stroke();
+      }
+    }
+    draw();
+    window.addEventListener('resize', draw);
+    if (window.matchMedia) {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', draw);
+    }
+  })();
+</script>

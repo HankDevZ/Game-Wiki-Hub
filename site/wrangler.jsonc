@@ -1,0 +1,13 @@
+{
+  // Pure static assets deploy — no Worker code, no Astro adapter.
+  // Committing this file also stops `wrangler deploy` from running its Astro
+  // auto-config, which would install @astrojs/cloudflare and pin
+  // compatibility_date to the build date (newer than the build image's workerd).
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hunt-games-field-index",
+  "compatibility_date": "2026-08-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

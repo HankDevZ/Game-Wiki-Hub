@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .bg { fill: #eceae0; }
+    .ring { stroke: #1b1f17; }
+    .needle { fill: #a1731f; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #10140f; }
+      .ring { stroke: #ece7d8; }
+      .needle { fill: #d3a548; }
+    }
+  </style>
+  <rect class="bg" width="64" height="64" rx="12"/>
+  <g class="ring" fill="none" stroke-width="1.47">
+    <circle cx="32" cy="32" r="21"/>
+    <path d="M32 5.12V13.94M32 50.06V58.88M5.12 32H13.94M50.06 32H58.88"/>
+  </g>
+  <path class="needle" d="M32 20.45L35.78 32L32 43.55L28.22 32Z"/>
+</svg>

@@ -1,0 +1,190 @@
+---
+import '../styles/global.css';
+import { SITE } from '../site.config';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Overrides the auto-generated canonical (only needed for paginated/aliased pages). */
+  canonical?: string;
+  /** ISO date the page content was last meaningfully changed. */
+  updated?: string;
+  /** JSON-LD objects to embed. Breadcrumbs are added automatically. */
+  schema?: Record<string, unknown>[];
+  /** Set true on pages that should not be indexed. */
+  noindex?: boolean;
+  /** Breadcrumb trail, excluding Home and the current page. */
+  breadcrumbs?: { href: string; label: string }[];
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title,
+  description,
+  canonical,
+  updated,
+  schema = [],
+  noindex = false,
+  breadcrumbs = [],
+  ogType = 'website',
+} = Astro.props;
+
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, SITE.url).href;
+const fullTitle = Astro.url.pathname === '/' ? title : `${title} | ${SITE.name}`;
+const ogImage = new URL('/img/og.png', SITE.url).href;
+
+const trail = [{ href: '/', label: 'Home' }, ...breadcrumbs];
+
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    ...trail.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.label,
+      item: new URL(c.href, SITE.url).href,
+    })),
+    {
+      '@type': 'ListItem',
+      position: trail.length + 1,
+      name: title,
+      item: canonicalUrl,
+    },
+  ],
+};
+
+const allSchema = [breadcrumbSchema, ...schema];
+---
+
+<html lang={SITE.locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {
+      !noindex && (
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+      )
+    }
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM brief" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.ogLocale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${SITE.name} — ${SITE.tagline}`} />
+    {updated && <meta property="article:modified_time" content={new Date(updated).toISOString()} />}
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {SITE.twitter && <meta name="twitter:site" content={SITE.twitter} />}
+
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#eceae0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#10140f" media="(prefers-color-scheme: dark)" />
+
+    {
+      allSchema.map((s) => (
+        <script is:inline type="application/ld+json" set:html={JSON.stringify(s)} />
+      ))
+    }
+
+    <Analytics />
+  </head>
+  <body>
+    <a href="#main" class="skip">Skip to content</a>
+    <Header />
+    {
+      trail.length > 1 && (
+        <nav class="wrap crumbs" aria-label="Breadcrumb">
+          <ol>
+            {trail.map((c) => (
+              <li>
+                <a href={c.href}>{c.label}</a>
+              </li>
+            ))}
+            <li aria-current="page">{title}</li>
+          </ol>
+        </nav>
+      )
+    }
+    <main id="main">
+      <slot />
+      {
+        updated && (
+          <p class="wrap small muted updated">
+            Last updated <time datetime={updated}>{updated}</time>.
+          </p>
+        )
+      }
+    </main>
+    <Footer />
+
+    <style>
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: var(--accent);
+        color: var(--accent-text);
+        padding: 0.6rem 1rem;
+        z-index: 100;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .skip:focus {
+        left: 0;
+      }
+      .crumbs {
+        padding-top: 1.5rem;
+        font-size: 0.85rem;
+        color: var(--text-faint);
+      }
+      .crumbs ol {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 0;
+        margin: 0;
+      }
+      .crumbs li + li::before {
+        content: '/';
+        margin-right: 0.5rem;
+        color: var(--line-strong);
+      }
+      .crumbs li {
+        margin: 0;
+      }
+      .crumbs a {
+        color: var(--text-soft);
+        text-decoration: none;
+      }
+      .crumbs a:hover {
+        color: var(--accent);
+      }
+      .updated {
+        margin-top: 3rem;
+      }
+    </style>
+  </body>
+</html>

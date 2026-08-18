@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+import { STATS } from '../data/games';
+
+const title = 'About Hunt Games';
+const description =
+  'What the Hunt Games network is, how a wiki gets surveyed and catalogued, and how the whole thing is run.';
+const updated = '2026-08-18';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'AboutPage',
+    name: title,
+    url: new URL('/about/', SITE.url).href,
+    publisher: { '@type': 'Organization', name: SITE.name, url: SITE.url },
+  },
+];
+---
+
+<Base title={title} description={description} updated={updated} schema={schema} ogType="article">
+  <div class="wrap">
+    <p class="eyebrow">About</p>
+    <h1>About Hunt Games</h1>
+    <p class="lede">
+      Hunt Games is a small network of independent, fan-made wikis. Each site covers exactly one
+      game, in depth, at its own subdomain under hunt-games.com. This page is the network&rsquo;s
+      index &mdash; {STATS.total} entries catalogued, {STATS.live} of them live.
+    </p>
+  </div>
+
+  <div class="wrap prose">
+    <h2>Why one site per game</h2>
+    <p>
+      Most game wikis try to cover everything at once and end up thin everywhere. Each Hunt Games
+      site does the opposite: it exists because we found measured search demand for that specific
+      game, and it only publishes pages that answer a real question someone is asking &mdash;
+      release dates, mechanics that aren&rsquo;t explained in-game, calculators, build guides,
+      whatever the game itself actually withholds from the player.
+    </p>
+
+    <h2>How an entry gets here</h2>
+    <p>Every listing on the index goes through the same three stages:</p>
+    <ul>
+      <li>
+        <strong>Surveyed.</strong> We research what people actually search for about the game
+        before writing a single page, so nothing gets published without a reason to exist.
+      </li>
+      <li>
+        <strong>Catalogued.</strong> Once the site is live at its own subdomain, it&rsquo;s added
+        to this index with a genre, a status, and a link.
+      </li>
+      <li>
+        <strong>Maintained.</strong> Sites are periodically re-checked for broken links, stale
+        release information, and guides that patches have made incorrect.
+      </li>
+    </ul>
+
+    <h2 id="disclaimer">Not affiliated with the games we cover</h2>
+    <p>
+      Hunt Games and every site in the network are independent fan projects. We are not affiliated
+      with, endorsed by, or sponsored by any of the studios or publishers whose games are indexed
+      here. Game names, logos, screenshots, and other assets referenced across the network belong
+      to their respective owners and are used under fair use for commentary and reference. See the{' '}
+      <a href="/terms/">terms of use</a> for the full statement.
+    </p>
+
+    <h2>Suggesting a game</h2>
+    <p>
+      If there&rsquo;s a game you think deserves the same treatment &mdash; a real, sourced,
+      single-purpose wiki &mdash; <a href="/contact/">tell us</a>. We can&rsquo;t promise a site for
+      every suggestion, but we read every one.
+    </p>
+
+    <h2>Corrections</h2>
+    <p>
+      Something wrong on one of the network&rsquo;s sites, or in this index itself? Email{' '}
+      <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a> and say which page. Each
+      individual wiki also lists its own contact details.
+    </p>
+  </div>
+</Base>

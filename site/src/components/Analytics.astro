@@ -1,0 +1,29 @@
+---
+import { ANALYTICS } from '../site.config';
+
+/**
+ * Google Analytics 4 (gtag.js). Off until a `gaMeasurementId` is set.
+ *
+ * `is:inline` is required on both tags: without it Astro would bundle the
+ * snippet as a module, which breaks the `gtag` global that GA's loader expects.
+ */
+const { gaMeasurementId, prodOnly } = ANALYTICS;
+const enabled = Boolean(gaMeasurementId) && (!prodOnly || import.meta.env.PROD);
+---
+
+{
+  enabled && (
+    <Fragment>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`} />
+      <script is:inline define:vars={{ gaMeasurementId }}>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', gaMeasurementId);
+      </script>
+    </Fragment>
+  )
+}

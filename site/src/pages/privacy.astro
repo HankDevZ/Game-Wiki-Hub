@@ -1,0 +1,139 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, ANALYTICS } from '../site.config';
+
+const title = 'Privacy Policy';
+const description = `How ${SITE.name} handles data: what is collected, what is not, cookies, analytics, and your rights.`;
+const updated = '2026-08-18';
+const effective = 'August 18, 2026';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `Privacy Policy — ${SITE.name}`,
+    url: new URL('/privacy/', SITE.url).href,
+    dateModified: updated,
+  },
+];
+---
+
+<Base title={title} description={description} updated={updated} schema={schema} ogType="article">
+  <div class="wrap prose">
+    <h1>Privacy policy</h1>
+    <p class="lede">Effective {effective}.</p>
+
+    <p>
+      {SITE.name} ("we", "the site") is an independent fan project published at{' '}
+      <a href={SITE.url}>{SITE.url.replace('https://', '')}</a>, and is the index for every wiki in
+      the Hunt Games network. This policy covers this index page only. Each game wiki under
+      hunt-games.com is built and deployed separately and may publish its own privacy policy at its
+      own subdomain — check the site you're on if you followed a link from here.
+    </p>
+
+    <h2>The short version</h2>
+    <p>
+      This site is a set of static pages. There are no accounts, no logins, no comments, and no
+      newsletter. We do not ask you for personal information anywhere on this index.
+    </p>
+
+    <h2>Information we collect</h2>
+    <h3>Information you give us</h3>
+    <p>
+      None, unless you choose to email us. If you do, we receive whatever you put in the message and
+      keep it only as long as needed to reply.
+    </p>
+
+    <h3>Information collected automatically</h3>
+    <p>
+      Our hosting provider processes standard server and network request data — IP address, browser
+      user-agent, requested URL, timestamp — as an ordinary part of delivering the page to you and
+      protecting the service from abuse. We do not use these logs to build profiles of individuals.
+    </p>
+    {
+      ANALYTICS.gaMeasurementId ? (
+        <Fragment>
+          <h3>Analytics</h3>
+          <p>
+            We use Google Analytics to understand which entries in the index get used. It sets
+            cookies and reports aggregate usage — pages viewed, approximate region, device type,
+            referring site. We have no interest in identifying individual visitors and do not attempt
+            to. Google's handling of this data is governed by the{' '}
+            <a href="https://policies.google.com/privacy" rel="noopener nofollow">
+              Google Privacy Policy
+            </a>
+            . You can opt out with the{' '}
+            <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener nofollow">
+              Google Analytics opt-out browser add-on
+            </a>
+            , or by blocking the script in your browser or an extension.
+          </p>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <h3>Analytics</h3>
+          <p>
+            This index currently runs no analytics or tracking scripts. If that changes, this policy
+            will be updated before the change goes live, and the effective date at the top will move.
+          </p>
+        </Fragment>
+      )
+    }
+
+    <h2>Cookies</h2>
+    <p>
+      This site sets no cookies of its own.{' '}
+      {
+        ANALYTICS.gaMeasurementId
+          ? 'The analytics provider described above sets its own cookies; blocking them does not affect anything on this site.'
+          : 'With no analytics running, a visit should leave no cookies at all.'
+      }{' '}
+      Nothing on the site depends on cookies to function.
+    </p>
+
+    <h2>Outbound links</h2>
+    <p>
+      Every card in the index links out to a separate site — either another Hunt Games wiki on its
+      own subdomain, or (rarely) an external reference. Once you follow a link you're on that site's
+      property and its own privacy policy applies. We don't control what those sites collect, and
+      following a link from here doesn't send them any information about you beyond the ordinary
+      referrer your browser already sends on any click.
+    </p>
+
+    <h2>Children</h2>
+    <p>
+      This site is not directed at children under 13 and we do not knowingly collect information from
+      them. If you believe a child has sent us personal information by email, contact us and we will
+      delete it.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+      Depending on where you live — including under the GDPR in the EU/UK and the CCPA in California
+      — you may have the right to access, correct, delete, or restrict processing of your personal
+      data, and to object to it. Because this site holds essentially none, most such requests are
+      satisfied by explaining that there is nothing to return. To exercise any of these rights, or to
+      ask what we hold, email <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+    </p>
+
+    <h2>Data retention and security</h2>
+    <p>
+      We do not maintain a database of visitors. Server logs are retained by the hosting provider
+      under their own schedule. The site is served over HTTPS.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      If this policy changes materially, the effective date above changes with it. Continuing to use
+      the site after an update means you accept the revised policy.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Questions about this policy: <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+    </p>
+    <p class="small muted">
+      This policy describes our actual practices in plain language. It is not legal advice.
+    </p>
+  </div>
+</Base>

@@ -1,0 +1,131 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+
+const title = 'Terms of Use';
+const description = `The terms you accept by using ${SITE.name}: permitted use, accuracy disclaimers, intellectual property, and liability.`;
+const updated = '2026-08-18';
+const effective = 'August 18, 2026';
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: `Terms of Use — ${SITE.name}`,
+    url: new URL('/terms/', SITE.url).href,
+    dateModified: updated,
+  },
+];
+---
+
+<Base title={title} description={description} updated={updated} schema={schema} ogType="article">
+  <div class="wrap prose">
+    <h1>Terms of use</h1>
+    <p class="lede">Effective {effective}.</p>
+
+    <p>
+      These terms govern your use of {SITE.name} at{' '}
+      <a href={SITE.url}>{SITE.url.replace('https://', '')}</a> — the index page for the Hunt Games
+      network. By using the site you accept them. If you do not, please stop using the site.
+    </p>
+
+    <h2>1. What this site is</h2>
+    <p>
+      {SITE.name} is a free, independent directory of game wikis. It lists every site in the Hunt
+      Games network — each one an independent, single-game reference published at its own
+      subdomain — by genre, status, and domain. It is provided for informational purposes.
+    </p>
+
+    <h2>2. Not affiliated with the games we cover</h2>
+    <p>
+      Neither this index nor any site in the Hunt Games network is affiliated with, endorsed by,
+      sponsored by, or in any way officially connected to the developers or publishers of the games
+      listed here. All game names, trademarks, logos, and assets referenced across the network are
+      the property of their respective owners and are referred to under fair use for the purposes of
+      commentary, criticism, and reference.
+    </p>
+
+    <h2>3. Accuracy</h2>
+    <p>
+      We try to keep every listing on this index current — genre, status, and domain — but games and
+      the sites that cover them change without notice. A site's status can move from "in survey" to
+      live, a domain can change, and the content on any individual wiki is maintained separately from
+      this index and may lag behind a patch or a release. Content is provided "as is" without
+      warranty of any kind, express or implied, including warranties of accuracy, fitness for a
+      particular purpose, or non-infringement.
+    </p>
+
+    <h2>4. Acceptable use</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>Use the site for any unlawful purpose or in violation of any applicable regulation.</li>
+      <li>
+        Attempt to gain unauthorised access to the site, its hosting infrastructure, or any connected
+        system.
+      </li>
+      <li>
+        Scrape, crawl, or otherwise access the site by automated means at a rate that degrades
+        service for others.
+      </li>
+      <li>Republish substantial portions of the site's content as your own.</li>
+    </ul>
+
+    <h2>5. Intellectual property</h2>
+    <p>
+      The original text, layout, code, and design of this index are ours. You're welcome to quote
+      short passages with attribution and a link. Wholesale reproduction — including republishing the
+      directory or feeding it into a product that reproduces it — requires permission.
+    </p>
+
+    <h2>6. Other sites in the network</h2>
+    <p>
+      Each subdomain linked from this index is a separately built and maintained site. It may carry
+      its own terms of use, privacy policy, and disclaimers in addition to this page. This index
+      links to them as a directory; it does not host, review, or take responsibility for their
+      content beyond keeping the listing here accurate.
+    </p>
+
+    <h2>7. External links</h2>
+    <p>
+      The site links to third-party sites, including individual game storefronts and community
+      resources referenced by network wikis. We do not control them and are not responsible for their
+      content, availability, or practices. A link is not an endorsement.
+    </p>
+
+    <h2>8. Limitation of liability</h2>
+    <p>
+      To the fullest extent permitted by law, {SITE.name} and its operators are not liable for any
+      indirect, incidental, consequential, or special damages arising from your use of, or inability
+      to use, this site — including but not limited to reliance on information published here or on
+      any linked site.
+    </p>
+
+    <h2>9. Availability</h2>
+    <p>
+      The site is provided free of charge with no uptime commitment. We may change, suspend, or
+      discontinue any part of it, including adding or removing entries, at any time and without
+      notice.
+    </p>
+
+    <h2>10. Changes to these terms</h2>
+    <p>
+      We may revise these terms. The effective date above will change when we do. Continued use after
+      a revision constitutes acceptance of it.
+    </p>
+
+    <h2>11. Governing law</h2>
+    <p>
+      These terms are governed by the laws applicable at the operator's place of establishment,
+      without regard to conflict-of-law rules. If any provision is found unenforceable, the remainder
+      stays in force.
+    </p>
+
+    <h2>12. Contact</h2>
+    <p>
+      Questions, corrections, or intellectual property concerns:{' '}
+      <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>. If you are a rights holder and
+      believe something here exceeds fair use, contact us and we will address it promptly.
+    </p>
+    <p class="small muted">These terms are written in plain language and are not legal advice.</p>
+  </div>
+</Base>

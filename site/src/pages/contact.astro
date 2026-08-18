@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+
+const title = 'Contact';
+const description = `Reach the Hunt Games network: corrections, game suggestions, and press.`;
+
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: title,
+    url: new URL('/contact/', SITE.url).href,
+  },
+];
+---
+
+<Base title={title} description={description} schema={schema} ogType="article">
+  <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h1>Get in touch</h1>
+    <p class="lede">
+      One address for the whole network. Individual wikis may also list their own contact details —
+      use whichever is more specific to what you're writing about.
+    </p>
+  </div>
+
+  <div class="wrap prose">
+    <a class="email-card" href={`mailto:${SITE.contactEmail}`}>
+      <span class="eyebrow">Email</span>
+      <span class="email">{SITE.contactEmail}</span>
+    </a>
+
+    <h2>What to write in about</h2>
+    <ul>
+      <li>
+        <strong>Corrections.</strong> Something wrong on this index, or on one of the network's
+        wikis — say which page.
+      </li>
+      <li>
+        <strong>Suggest a game.</strong> A game you think deserves a focused, sourced wiki of its
+        own. Tell us the game and why existing coverage falls short.
+      </li>
+      <li>
+        <strong>Rights &amp; takedowns.</strong> If you're a rights holder and believe something on
+        the network exceeds fair use, say which site and which page.
+      </li>
+      <li>
+        <strong>Press &amp; partnerships.</strong> General inquiries about the network.
+      </li>
+    </ul>
+    <p class="small muted">We read every message. Replies aren't guaranteed on any particular timeline.</p>
+  </div>
+</Base>
+
+<style>
+  .email-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border: 1px solid var(--line-strong);
+    padding: 1.25rem 1.5rem;
+    text-decoration: none;
+    color: var(--text);
+    margin-bottom: 2rem;
+    max-width: fit-content;
+  }
+  .email-card:hover {
+    border-color: var(--accent);
+  }
+  .email-card:hover .email {
+    color: var(--accent);
+  }
+  .email {
+    font-family: var(--font-mono);
+    font-size: 1.15rem;
+  }
+</style>

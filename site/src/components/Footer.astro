@@ -1,0 +1,125 @@
+---
+import { SITE } from '../site.config';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div class="brand-col">
+        <span class="brand-mark">{SITE.shortName}</span>
+        <p class="small muted">
+          An independent network of fan-made game wikis, one per world, published under
+          hunt-games.com.
+        </p>
+      </div>
+      <div>
+        <p class="head">Index</p>
+        <ul>
+          <li><a href="/#index">Browse all entries</a></li>
+          <li><a href="/#index">By genre</a></li>
+          <li><a href="/contact/">Suggest a game</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="head">Network</p>
+        <ul>
+          <li><a href="/about/">About Hunt Games</a></li>
+          <li><a href="/about/#disclaimer">Disclaimer</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="head">Legal</p>
+        <ul>
+          <li><a href="/privacy/">Privacy Policy</a></li>
+          <li><a href="/terms/">Terms of Use</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <p class="legal-note">
+        Hunt Games is an independent fan project. Not affiliated with, endorsed by, or sponsored by
+        any of the games, studios, or publishers indexed here. All trademarks belong to their
+        respective owners.
+      </p>
+      <p class="copyright">&copy; {year} {SITE.shortName}</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: clamp(2.5rem, 5vw, 3.5rem) 2rem;
+    margin-top: 2rem;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 2rem;
+    padding-bottom: 2.2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand-col .brand-mark {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.15rem;
+  }
+  .brand-col p {
+    max-width: 32ch;
+    margin: 0.9rem 0 0;
+  }
+  .head {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin: 0 0 0.9rem;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  li {
+    margin: 0;
+  }
+  li a {
+    display: block;
+    text-decoration: none;
+    color: var(--text-soft);
+    font-size: 0.9rem;
+    padding: 0.28rem 0;
+  }
+  li a:hover {
+    color: var(--accent);
+  }
+  .legal {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1.4rem;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+  }
+  .legal-note {
+    max-width: 62ch;
+    margin: 0;
+  }
+  .copyright {
+    margin: 0;
+    white-space: nowrap;
+  }
+  @media (max-width: 860px) {
+    .cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

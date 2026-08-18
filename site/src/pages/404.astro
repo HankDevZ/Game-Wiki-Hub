@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+
+const title = 'Entry not found';
+const description = 'That page does not exist on the Hunt Games field index.';
+---
+
+<Base title={title} description={description} noindex>
+  <div class="wrap prose">
+    <p class="eyebrow">Error 404</p>
+    <h1>No entry at that reference</h1>
+    <p class="lede">
+      The page you asked for isn't catalogued here. Either the address was wrong, or it moved since
+      the index was last surveyed.
+    </p>
+    <h2>Try one of these</h2>
+    <ul>
+      <li><a href="/">Home</a> — the full index of every Hunt Games wiki</li>
+      <li><a href="/about/">About Hunt Games</a></li>
+      <li><a href="/contact/">Contact</a></li>
+    </ul>
+  </div>
+</Base>
