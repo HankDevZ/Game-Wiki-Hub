@@ -1,9 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, ANALYTICS } from '../site.config';
+import { SITE, ANALYTICS, ADSENSE } from '../site.config';
 
 const title = 'Privacy Policy';
-const description = `How ${SITE.name} handles data: what is collected, what is not, cookies, analytics, and your rights.`;
+const description = `How ${SITE.name} handles data: what is collected, what is not, cookies, analytics, advertising, and your rights.`;
 const updated = '2026-08-18';
 const effective = 'August 18, 2026';
 
@@ -79,14 +79,47 @@ const schema = [
         </Fragment>
       )
     }
+    {
+      ADSENSE.client ? (
+        <Fragment>
+          <h3>Advertising</h3>
+          <p>
+            We use Google AdSense to show ads on this site. AdSense and its advertising partners
+            may use cookies or similar identifiers to serve ads based on your visits here and to
+            other sites, measure ad performance, and in some cases show ads based on your
+            interests. Google's handling of this data is governed by the{' '}
+            <a href="https://policies.google.com/technologies/ads" rel="noopener nofollow">
+              Google Ads Privacy &amp; Terms
+            </a>
+            . You can review or turn off personalized advertising at{' '}
+            <a href="https://adssettings.google.com" rel="noopener nofollow">
+              Google Ads Settings
+            </a>
+            , or opt out of participating vendors generally at{' '}
+            <a href="https://www.aboutads.info/choices" rel="noopener nofollow">
+              aboutads.info
+            </a>
+            .
+          </p>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <h3>Advertising</h3>
+          <p>
+            This index does not currently show ads. If that changes, this policy will be updated
+            before the change goes live, and the effective date at the top will move.
+          </p>
+        </Fragment>
+      )
+    }
 
     <h2>Cookies</h2>
     <p>
       This site sets no cookies of its own.{' '}
       {
-        ANALYTICS.gaMeasurementId
-          ? 'The analytics provider described above sets its own cookies; blocking them does not affect anything on this site.'
-          : 'With no analytics running, a visit should leave no cookies at all.'
+        ANALYTICS.gaMeasurementId || ADSENSE.client
+          ? 'The analytics and/or advertising providers described above set their own cookies; blocking them does not affect anything on this site.'
+          : 'With no analytics or advertising running, a visit should leave no cookies at all.'
       }{' '}
       Nothing on the site depends on cookies to function.
     </p>
