@@ -29,7 +29,18 @@ export const SITE = {
  * privacy page) until a property exists.
  */
 export const ANALYTICS = {
-  gaMeasurementId: null as string | null,
+  gaMeasurementId: 'G-610S8RBJBC' as string | null,
+  prodOnly: true,
+} as const;
+
+/**
+ * Google AdSense.
+ *
+ * `prodOnly` keeps localhost out of served-ad counts. Set `client` to null to
+ * omit the loader script and the site-verification meta tag.
+ */
+export const ADSENSE = {
+  client: 'ca-pub-5296334268118042' as string | null,
   prodOnly: true,
 } as const;
 

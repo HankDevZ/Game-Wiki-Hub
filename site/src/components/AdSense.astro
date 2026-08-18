@@ -1,0 +1,26 @@
+---
+import { ADSENSE } from '../site.config';
+
+/**
+ * Google AdSense loader. Off until a `client` id is set.
+ *
+ * `is:inline` matches the Analytics component: without it Astro would bundle
+ * the snippet as a module rather than loading it as AdSense expects.
+ */
+const { client, prodOnly } = ADSENSE;
+const enabled = Boolean(client) && (!prodOnly || import.meta.env.PROD);
+---
+
+{
+  enabled && (
+    <Fragment>
+      <meta name="google-adsense-account" content={client} />
+      <script
+        is:inline
+        async
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${client}`}
+        crossorigin="anonymous"
+      />
+    </Fragment>
+  )
+}
