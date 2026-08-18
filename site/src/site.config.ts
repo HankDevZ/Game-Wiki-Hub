@@ -47,6 +47,7 @@ export const ADSENSE = {
 export const NAV = [
   { href: '/#index', label: 'Index' },
   { href: '/#how', label: 'How it works' },
+  { href: '/blog/', label: 'Blog' },
   { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Contact' },
 ] as const;

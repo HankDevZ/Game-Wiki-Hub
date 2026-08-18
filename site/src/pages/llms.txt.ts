@@ -1,19 +1,24 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../site.config';
 import { GAMES, STATS } from '../data/games';
+import { getCollection } from 'astro:content';
 
 /**
  * Served at /llms.txt — the llmstxt.org convention. A single plain-text brief an
  * LLM (or any answer engine) can read instead of crawling and guessing.
  *
- * Generated from the same data the homepage renders, so it cannot drift: adding
- * a game to `data/games.ts` updates this file on the next build too.
+ * Generated from the same data the homepage and blog render, so it cannot drift: adding a game to
+ * `data/games.ts` or a post to `content/blog/` updates this file on the next build too.
  */
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
   const u = (path: string) => new URL(path, SITE.url).href;
 
   const live = GAMES.filter((g) => g.domain);
   const pending = GAMES.filter((g) => !g.domain);
+
+  const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
 
   const body = `# ${SITE.name}
 
@@ -52,10 +57,21 @@ ${
 ## Pages on this index
 
 - [Home](${u('/')}): the full catalog, filterable by genre.
+- [Blog](${u('/blog/')}): field notes spanning the network — genre explainers, recommendations, how entries get catalogued.
 - [About](${u('/about/')}): what the network is and how an entry gets catalogued.
 - [Contact](${u('/contact/')}): corrections, game suggestions, press.
 - [Privacy policy](${u('/privacy/')})
 - [Terms of use](${u('/terms/')})
+
+## Blog posts
+
+${
+  posts.length
+    ? posts
+        .map((p) => `- [${p.data.title}](${u(`/blog/${p.id}/`)}): ${p.data.description}`)
+        .join('\n')
+    : '(none yet)'
+}
 
 ## Using this content
 

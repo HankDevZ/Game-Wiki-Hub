@@ -34,6 +34,17 @@ still exists for the next game that's mid-build — set `domain` to the subdomai
 the card, JSON-LD `ItemList`, and llms.txt "live" section all update on the next build. No other
 file needs to change.
 
+## Blog
+
+`/blog/` holds network-wide editorial content — genre explainers, cross-game recommendations, how
+the catalog itself is run — as opposed to per-game guides, which belong on each wiki's own
+subdomain. Posts are Markdown files in
+[`site/src/content/blog/`](../site/src/content/blog/), typed via
+[`site/src/content.config.ts`](../site/src/content.config.ts). Adding a post is just adding a file
+there; the index at `/blog/`, each post's page, and the `/llms.txt` "Blog posts" section all pick it
+up on the next build with no other file to touch. Set `draft: true` in frontmatter to keep a post
+out of all three until it's ready.
+
 ## Open items
 
 - Wire up Google Analytics (or an alternative) by setting `ANALYTICS.gaMeasurementId` in
