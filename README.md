@@ -22,6 +22,28 @@ cd site && npm install && npm run dev
 | `npm run check` | Type and template diagnostics — keep this at zero |
 | `npm run assets` | Regenerate favicon / OG image from `scripts/generate-assets.mjs` |
 
+## Game wikis
+
+| # | Wiki | Genre |
+| --- | --- | --- |
+| 01 | [Bombanana](https://bombanana.hunt-games.com) | Party / Social Deduction |
+| 02 | [Crimson Moon](https://crimson-moon.hunt-games.com) | Co-op Action |
+| 03 | [Doloc Town](https://doloctown.hunt-games.com) | Cozy Sim |
+| 04 | [Duskfade](https://duskfade.hunt-games.com) | Survival Adventure |
+| 05 | [Grain Rot](https://grainrot.hunt-games.com) | Horror |
+| 06 | [Iron Nest](https://ironnest.hunt-games.com) | Tower Defense Sim |
+| 07 | [Mistfall Hunter](https://mistfall.hunt-games.com) | Action / Hunting |
+| 08 | [Pax Autocratica](https://paxautocratica.hunt-games.com) | Strategy |
+| 09 | [Schedule 1](https://schedule1.hunt-games.com) | Simulation |
+| 10 | [Sovereign Tower](https://sovereign-tower.hunt-games.com) | Roguelike |
+| 11 | [Wardogs](https://wardogs-game.hunt-games.com) | Tactical Shooter |
+| 12 | [ZeroSpace](https://zerospace.hunt-games.com) | RTS / RPG |
+| 13 | [Fields of Mistria](https://mistria.hunt-games.com) | Farming Sim |
+| 14 | [Sandustry](https://sandustry.hunt-games.com) | Sandbox / Factory |
+
+This list is generated from [`site/src/data/games.ts`](site/src/data/games.ts) — update the entry
+there (not here) when a domain changes or a new wiki joins the network.
+
 ## Editing the directory
 
 The whole network listing is one file: [`site/src/data/games.ts`](site/src/data/games.ts). Add a
