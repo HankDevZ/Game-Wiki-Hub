@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { SITE } from '../site.config';
 import { GAMES, STATS } from '../data/games';
+import { FAQ } from '../data/faq';
 import { getCollection } from 'astro:content';
 
 /**
@@ -53,6 +54,10 @@ ${
     ? pending.map((g) => `- ${g.title} (${g.genre}) — ${g.desc}`).join('\n')
     : '(none currently)'
 }
+
+## Frequently asked questions
+
+${FAQ.map((f) => `**${f.question}**\n${f.answer}`).join('\n\n')}
 
 ## Pages on this index
 
